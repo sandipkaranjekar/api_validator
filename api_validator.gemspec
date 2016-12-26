@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["sandipkaranjekar"]
   spec.email         = ["sandipkaranjekar@gmail.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{RubyGem for API validation}
+  spec.description   = %q{RubyGem for API validation. Here you need to set rules and messages in yml, rest of the things are handle by gem.}
+  spec.homepage      = "https://github.com/sandipkaranjekar/api_validator"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'

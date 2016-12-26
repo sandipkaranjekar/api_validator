@@ -2,7 +2,7 @@ require 'rails/generators'
 
 module ApiValidator
   module Generators
-    class CreateGenerator < Rails::Generators::NamedBase
+    class CreateGenerator < Rails::Generators::Base
     	def self.source_root
         source_root ||= File.join(File.dirname(__FILE__), 'templates/')
       end

@@ -1,14 +1,12 @@
 module ApiValidator
 	class ApplicationController < ActionController::Base
 	  # request validation method
-	  # Input - params
+	  # Input - request params
 	  # Process - Validate params with there rules & definition
 	  # Output - report error on invalidity
 	  def request_validation
-	    # to support legacy - the validation is only applicable when "version_number" presents
-	    #if params[:version_number].present? && params[:controller].present? && params[:action].present? && VALIDATION_CONFIG[params[:controller]][params[:action]].present?
-	    if params[:controller].present? && params[:action].present? && VALIDATION_CONFIG[params[:controller]].present?  && VALIDATION_CONFIG[params[:controller]][params[:action]].present?
-	      # validation - parameters defination 
+	    if is_api_validator_applicable?(params[:controller], params[:action])
+	      # validation - parameters defination
 	      validation_pd = VALIDATION_CONFIG[params[:controller]][params[:action]]
 	      
 	      validation_pd.keys.each do |key|
@@ -19,17 +17,7 @@ module ApiValidator
 	            begin
 	              json_data = JSON.parse(params[key])
 	              json_data = [json_data] unless json_data.class == Array
-	              json_data.each do |data|
-	                data.keys.each do |json_data_key|
-	                  if validation_pd[key].has_key?("parameters")
-	                    next unless validation_pd[key]["parameters"].has_key?(json_data_key)
-	                    validation_pd[key]["parameters"][json_data_key]["rules"].each do |json_data_rule, json_data_definition|
-	                      #CAUTION: if nested JSON, this should be recursive
-	                      return error_response(validation_pd[key]["parameters"][json_data_key]["messages"][json_data_rule]) if validate?(json_data_key, data[json_data_key], json_data_rule, json_data_definition, validation_pd[key]["parameters"][json_data_key])
-	                    end
-	                  end
-	                end
-	              end
+	              json_string_validator(json_data, validation_pd, key)
 	            rescue JSON::ParserError => e  
 	              return error_response(validation_pd[key]["messages"][rule], 422)
 	            end
@@ -42,14 +30,29 @@ module ApiValidator
 	    end # main if end
 	  end
 
+	  def is_api_validator_applicable?(controller, action)
+	  	VALIDATION_CONFIG[controller].present? && VALIDATION_CONFIG[controller][action].present?
+	  end
+
+	  def json_string_validator(json_data, validation_pd, key)
+	  	json_data.each do |data|
+        data.keys.each do |json_data_key|
+          if validation_pd[key].has_key?("parameters")
+            next unless validation_pd[key]["parameters"].has_key?(json_data_key)
+            validation_pd[key]["parameters"][json_data_key]["rules"].each do |json_data_rule, json_data_definition|
+              #CAUTION: if nested JSON, this should be recursive
+              if validate?(json_data_key, data[json_data_key], json_data_rule, json_data_definition, validation_pd[key]["parameters"][json_data_key])
+              	return error_response(validation_pd[key]["parameters"][json_data_key]["messages"][json_data_rule])
+              end
+            end
+          end
+        end
+      end
+	  end
+
 	  def error_response(message = nil, status = 400)
 	    response = {status: 'error', message: message}
 	    render json: response, status: status
-	  end
-
-	  def is_mobile_no_valid?(mobile, country_code = "+91")
-	    mobile_no = country_code + mobile
-	    return (Phonelib.valid?(mobile_no) ? true : false)
 	  end
 
 	  def is_integer?(value)
