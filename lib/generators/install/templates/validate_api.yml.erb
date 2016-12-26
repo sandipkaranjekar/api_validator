@@ -1,0 +1,40 @@
+# This yml used to specify your rules ans messages of parameters
+# You need to follow following pattern to make it applicable
+# controller_name:
+#   method_name:
+#     param1:
+#       rules:
+#         presence: true
+#         integer: true
+#         min_length: 5
+#         max_length: 15
+#         pattern: <%= "/\A^[a-zA-Z\s'.-]*$\Z/".source %> 
+#       messages:
+#         presence: "Param1 must present."
+#         integer: "Param1 must contain integer only."
+#         min_length: "Param1 must have minimum length of 5."
+#         max_length: "Param1 must have maximum length of 15."
+#         pattern: "Invalid Param1"
+#
+# Also if have some paramters which accepts json as value and that json have some 
+# which need to be validate you need to follow following pattern to make it applicable
+# controller_name:
+#   method_name:
+#     param1:
+#       rules:
+#         presence: true
+#         json_string: true
+#       messages:
+#         presence: "Param1 must present."
+#         json_string: "Invalid json string."
+#       paramters:
+#         json_1st_param:
+#           rules:
+#             presence: true
+#           messages:
+#             presence: "Json first param must prresent."
+#         json_2nd_param:
+#           rules:
+#             integer: true
+#           messages:
+#             integer: "Json second param must be integer only."
