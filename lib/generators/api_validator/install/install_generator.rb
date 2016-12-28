@@ -17,6 +17,13 @@ module ApiValidator
       def copy_validate_api_yml_file
       	copy_file "validate_api.yml.erb", "config/#{file_name}.yml.erb"
       end
+
+      def add_module
+        line = "class ApplicationController < ActionController::Base"
+        gsub_file 'app/controllers/application_controller.rb', /(#{Regexp.escape(line)})/mi do |match|
+          "#{match}\n include ApiValidator\n"
+        end 
+      end
     end
   end
 end

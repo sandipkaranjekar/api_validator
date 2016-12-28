@@ -19,7 +19,17 @@ module ApiValidator
             begin
               json_data = JSON.parse(params[key])
               json_data = [json_data] unless json_data.class == Array
-              json_string_validator(json_data, validation_pd, key)
+              json_data.each do |data|
+                data.keys.each do |json_data_key|
+                  if validation_pd[key].has_key?("parameters")
+                    next unless validation_pd[key]["parameters"].has_key?(json_data_key)
+                    validation_pd[key]["parameters"][json_data_key]["rules"].each do |json_data_rule, json_data_definition|
+                      #CAUTION: if nested JSON, this should be recursive
+                      return error_response(validation_pd[key]["parameters"][json_data_key]["messages"][json_data_rule]) if validate?(json_data_key, data[json_data_key], json_data_rule, json_data_definition, validation_pd[key]["parameters"][json_data_key])
+                    end
+                  end
+                end
+              end
             rescue JSON::ParserError => e  
               return error_response(validation_pd[key]["messages"][rule], 422)
             end
@@ -34,22 +44,6 @@ module ApiValidator
 
   def is_api_validator_applicable?(controller, action)
   	VALIDATION_CONFIG[controller].present? && VALIDATION_CONFIG[controller][action].present?
-  end
-
-  def json_string_validator(json_data, validation_pd, key)
-  	json_data.each do |data|
-      data.keys.each do |json_data_key|
-        if validation_pd[key].has_key?("parameters")
-          next unless validation_pd[key]["parameters"].has_key?(json_data_key)
-          validation_pd[key]["parameters"][json_data_key]["rules"].each do |json_data_rule, json_data_definition|
-            #CAUTION: if nested JSON, this should be recursive
-            if validate?(json_data_key, data[json_data_key], json_data_rule, json_data_definition, validation_pd[key]["parameters"][json_data_key])
-            	return error_response(validation_pd[key]["parameters"][json_data_key]["messages"][json_data_rule])
-            end
-          end
-        end
-      end
-    end
   end
 
   def error_response(message = nil, status = 400)
@@ -68,7 +62,7 @@ module ApiValidator
   def validate_array_string?(value, separator)
     parameter_ids = value.split(separator)
     parameter_ids.each do |parameter|
-        return false unless !!(parameter =~ INTEGER_REGEX)
+      return false unless !!(parameter =~ INTEGER_REGEX)
     end
     return true
   end
