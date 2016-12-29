@@ -1,8 +1,5 @@
-# ApiValidator
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/api_validator`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+# api_validator
+This gem helpful to validate api calls. You need to set rules and messages in yml file and rest of the things are handle by gem.
 
 ## Installation
 
@@ -20,21 +17,62 @@ Or install it yourself as:
 
     $ gem install api_validator
 
+Also you need to run generator to set the files -
+
+		$ rails g api_validator:install api_validator
+
+Note : Here you can pass any name you want to set for initilizer file and validation yml file, instead of 'api_validator'.
+
 ## Usage
 
-TODO: Write usage instructions here
+Before use of this gem you need to set ```ruby before_filter :request_validation ``` in controller where you want to validate request before reach to controller's method.
 
-## Development
+Also you need to set rules in the api_validator.yml.erb file. Example are mentioned in yml file.
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+Sample pattern for validation as follows - 
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+```yaml
+controller_name:
+   method_name:
+     param1:
+       rules:
+         presence: true
+         integer: true
+         min_length: 5
+         max_length: 15
+         pattern: <%= /\A^[a-zA-Z\s'.-]*$\Z/.source %> 
+       messages:
+         presence: "Param1 must present."
+         integer: "Param1 must contain integer only."
+         min_length: "Param1 must have minimum length of 5."
+         max_length: "Param1 must have maximum length of 15."
+         pattern: "Invalid Param1"
+```
 
-## Contributing
+Sample validation for JSON value in request parameter -
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/api_validator. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
-
-
+```yaml
+ controller_name:
+   method_name:
+     param1:
+       rules:
+         presence: true
+         json_string: true
+       messages:
+         presence: "Param1 must present."
+         json_string: "Invalid json string."
+       paramters:
+         json_1st_param:
+           rules:
+             presence: true
+           messages:
+             presence: "Json first param must prresent."
+         json_2nd_param:
+           rules:
+             integer: true
+           messages:
+             integer: "Json second param must be integer only."
+```
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
