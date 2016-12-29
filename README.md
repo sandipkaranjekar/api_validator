@@ -25,7 +25,7 @@ Note : Here you can pass any name you want to set for initilizer file and valida
 
 ## Usage
 
-Before use of this gem you need to set ```ruby before_filter :request_validation ``` in controller where you want to validate request before reach to controller's method.
+Before use of this gem you need to set ``` before_action :request_validation ``` in controller where you want to validate request before reach to controller's method.
 
 Also you need to set rules in the api_validator.yml.erb file. Example are mentioned in yml file.
 
