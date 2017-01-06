@@ -1,4 +1,5 @@
 # api_validator
+[![Gem Version](https://badge.fury.io/rb/api_validator.svg)](https://badge.fury.io/rb/api_validator)
 This gem helpful to validate api calls. You need to set rules and messages in yml file and rest of the things are handle by gem.
 
 ## Installation
@@ -41,14 +42,14 @@ controller_name:
          min_length: 5
          max_length: 15
          pattern: <%= /\A^[a-zA-Z\s'.-]*$\Z/.source %>
-         inclusion: 1..100 
+         inclusion: 1..10"
        messages:
          presence: "Param1 must present."
          integer: "Param1 must contain integer only."
          min_length: "Param1 must have minimum length of 5."
          max_length: "Param1 must have maximum length of 15."
          pattern: "Invalid Param1"
-         inclusion: "The param1 must be between 1 and 10""
+         inclusion: "The param1 must be between 1 and 10"
 ```
 
 Sample validation for JSON value in request parameter -
