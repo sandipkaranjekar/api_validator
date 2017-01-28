@@ -1,5 +1,6 @@
 # api_validator
 [![Gem Version](https://badge.fury.io/rb/api_validator.svg)](https://badge.fury.io/rb/api_validator)
+
 This gem helpful to validate api calls. You need to set rules and messages in yml file and rest of the things are handle by gem.
 
 ## Installation
