@@ -42,7 +42,7 @@ controller_name:
          min_length: 5
          max_length: 15
          pattern: <%= /\A^[a-zA-Z\s'.-]*$\Z/.source %>
-         inclusion: 1..10"
+         inclusion: "1..10"
        messages:
          presence: "Param1 must present."
          integer: "Param1 must contain integer only."

@@ -60,9 +60,8 @@ module ApiValidator
   end
 
   def is_in_inclusion?(defination, value)
-     first_defination = defination.split("..").first
-     last_defination = defination.split("..").last
-     (first_defination.to_i <= value.to_i && value.to_i <= last_defination.to_i)
+    range = defination.split("..").map(&:to_i)
+    Range.new(range[0], range[-1]) === value.to_i
   end 
 
   def validate_array_string?(value, separator)
