@@ -9,12 +9,14 @@
 #         min_length: 5
 #         max_length: 15
 #         pattern: <%#= "/\A^[a-zA-Z\s'.-]*$\Z/".source %> 
+#         inclusion: 1..10
 #       messages:
 #         presence: "Param1 must present."
 #         integer: "Param1 must contain integer only."
 #         min_length: "Param1 must have minimum length of 5."
 #         max_length: "Param1 must have maximum length of 15."
 #         pattern: "Invalid Param1"
+#         inclusion: "The param1 must be between 1 and 10"
 #
 # Also if have some paramters which accepts json as value and that json have some 
 # which need to be validate you need to follow following pattern to make it applicable
