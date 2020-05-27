@@ -17,7 +17,7 @@ module ApiValidator
           # when param's value is JSON string then parse it and validate parameters
           if (rule == "json_string" and defination == true)
             begin
-              json_data = JSON.parse(params[key])
+              json_data = JSON.parse(params[key]) rescue params[key]
               json_data = [json_data] unless json_data.class == Array
               json_data.each do |data|
                 data.keys.each do |json_data_key|
